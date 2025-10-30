@@ -1,6 +1,17 @@
 \documentclass[twoside,11pt]{article}
-
+\usepackage{tabularx}
+\usepackage{booktabs} % for professional table lines
+\usepackage{array}    % for better column formatting
+\usepackage{adjustbox} % optional, to resize if too wide
 \usepackage{blindtext}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage[utf8]{inputenc} % usually not needed in modern LaTe
+\usepackage{ragged2e} % in the preamble
+\usepackage{graphicx}
+\raggedbottom
+
 
 % Any additional packages needed should be included after jmlr2e.
 % Note that jmlr2e.sty includes epsfig, amssymb, natbib and graphicx,
@@ -32,6 +43,7 @@
 
 \usepackage{lastpage}
 \jmlrheading{23}{2022}{1-\pageref{LastPage}}{1/21; Revised 5/22}{9/22}{21-0000}{Author One and Author Two}
+\renewcommand{\cite}{\citep}
 
 % Short headings should be running head and authors last names
 
@@ -66,21 +78,266 @@ Clustering high-dimensional datasets poses significant challenges due to computa
 \end{keywords}
 
 \section{Introduction}
-The High-Dimensional Data age has revolutionized fundamentally the way organizations in various industries—finance, healthcare, e-commerce, telecommunication, and scientific research—use information to inform decision-making and innovation. Processing and analysing large volumes of data presents significant challenges for organizations across various industries \cite{Kumar2023} (Kumar, 2023). These challenges stem from the complexity and scale of data, necessitating advanced technologies and methodologies for effective management (Awrahman, 2022). With data production worldwide controlled to surpass by 2025, the capacity to process and analyze large volumes of data has emerged as a keystone of competitiveness and discovery (Rusu, 2022)(Acciarini, 2023)(Badshah, 2024). Clustering, a central method in unsupervised machine learning is a critical component of this ecosystem by revealing concealed patterns and structures in unlabeled data. Its applications span numerous fields, including financial risk assessment, medical diagnostics, customer segmentation, and social media analytics (Jain, 1999).However, the exponential growth of data—characterized by high dimensionality, noise, and large volumes—poses significant challenges to traditional clustering algorithms(Benabdellah, 2019)(Henry, 2023). Soft clustering, which assigns data points to multiple clusters with varying membership degrees, is particularly suited for datasets with overlapping or ambiguous patterns (Raut, 2011)(Li, 2024). Yet, established soft clustering algorithms often struggle with scalability, noise sensitivity, and initialization issues when applied to large-scale datasets(Wu, 2024)(Everitt, 2011).
+The High-Dimensional Data age has revolutionized fundamentally the way organizations in various industries—finance, healthcare, e-commerce, telecommunication, and scientific research—use information to inform decision-making and innovation. Processing and analysing large volumes of data presents significant challenges for organizations across various industries \cite{Kumar2023}. These challenges stem from the complexity and scale of data, necessitating advanced technologies and methodologies for effective management \cite{awrahman2022}. With data production worldwide controlled to surpass by 2025, the capacity to process and analyze large volumes of data has emerged as a keystone of competitiveness and discovery \cite{rusu2022} \cite{acciarini2023} \cite{badshah2024}. Clustering, a central method in unsupervised machine learning is a critical component of this ecosystem by revealing concealed patterns and structures in unlabeled data. Its applications span numerous fields, including financial risk assessment, medical diagnostics, customer segmentation, and social media analytics \cite{jain1999}.However, the exponential growth of data—characterized by high dimensionality, noise, and large volumes—poses significant challenges to traditional clustering algorithms \cite{benabdellah2019}\cite{henry2023}. Soft clustering, which assigns data points to multiple clusters with varying membership degrees, is particularly suited for datasets with overlapping or ambiguous patterns \cite{raut2011}\cite{li2024}. Yet, established soft clustering algorithms often struggle with scalability, noise sensitivity, and initialization issues when applied to large-scale datasets \cite{wu2024}\cite{everitt2011}.
 
 \subsection{Challenges of High-Dimensional Data Clustering}
-However, the scale and complexity of high-dimensional data introduce formidable challenges that strain traditional clustering approaches. High dimensionality is a primary hurdle, as datasets often comprise thousands of features—such as customer attributes in transactional records or sensor readings in IoT applications (Manakkadu, 2024). This phenomenon, known as the curse of dimensionality, undermines the effectiveness of distance-based clustering methods by rendering distances between points less meaningful, leading to sparse and poorly defined clusters (Zong, 2020). Moreover, high-dimensional data escalates computational complexity, requiring substantial memory and processing power, which can render algorithms like Fuzzy C-Means (FCM)(Bezdek, 1984)(Hashemi, 2023), Fuzzy C-Median(Yu, 2004)(Mallik, 2024)and Possibilistic C-Means(Krishnapuram, 1993)(Mallik, 2021) impractical for datasets spanning gigabytes or terabytes(Pal, 1995).
-The problems of noise and outliers, which are common in real-world datasets, are also important. Noise, such as invalid entries in transactional records, and outliers, such as fraudulent transactions in a retail dataset, can seriously skew cluster boundaries, leading algorithms to misplace points or create incoherent groupings Zhang, 2019). For instance, in financial transaction analysis, a single outlier that is an abnormally large purchase can distort the centroid of a cluster, giving a misleading impression of normal customer behaviour. These outliers are especially undesirable in scenarios where manual cleaning is impossible due to sheer quantity (Amil, 2019).
+However, the scale and complexity of high-dimensional data introduce formidable challenges that strain traditional clustering approaches. High dimensionality is a primary hurdle, as datasets often comprise thousands of features—such as customer attributes in transactional records or sensor readings in IoT applications \cite{manakkadu2024}. This phenomenon, known as the curse of dimensionality, undermines the effectiveness of distance-based clustering methods by rendering distances between points less meaningful, leading to sparse and poorly defined clusters \cite{zong2020}. Moreover, high-dimensional data escalates computational complexity, requiring substantial memory and processing power, which can render algorithms like Fuzzy C-Means (FCM) \cite{bezdek1984}\cite{hashemi2023}, Fuzzy C-Median \cite{yu2004}\cite{mallik2024} and Possibilistic C-Means \cite{krishnapuram1993}\cite{mallik2021} impractical for datasets spanning gigabytes or terabytes \cite{pal1995}.
+The problems of noise and outliers, which are common in real-world datasets, are also important. Noise, such as invalid entries in transactional records, and outliers, such as fraudulent transactions in a retail dataset, can seriously skew cluster boundaries, leading algorithms to misplace points or create incoherent groupings \cite{zhang2019}. For instance, in financial transaction analysis, a single outlier that is an abnormally large purchase can distort the centroid of a cluster, giving a misleading impression of normal customer behaviour. These outliers are especially undesirable in scenarios where manual cleaning is impossible due to sheer quantity \cite{amil2019}.
 
 
 
 \subsection{Limitations of Traditional Clustering Algorithms}
-The computational overhead of processing large datasets further complicates clustering. Traditional algorithms often require multiple iterations over millions of data points, leading to prohibitive runtimes and resource demands (Pitafi, 2023). Yet, many existing methods, designed for smaller or cleaner datasets, falter under these conditions, producing results that are either too slow for practical use or compromised in quality due to noise sensitivity or parameter instability. These challenges—high dimensionality, noise, outliers, and computational inefficiency—underscore the urgent need for advanced clustering solutions tailored to High-Dimensional Data (Awad, 2023). 
+The computational overhead of processing large datasets further complicates clustering. Traditional algorithms often require multiple iterations over millions of data points, leading to prohibitive runtimes and resource demands \cite{pitafi2023}. Yet, many existing methods, designed for smaller or cleaner datasets, falter under these conditions, producing results that are either too slow for practical use or compromised in quality due to noise sensitivity or parameter instability. These challenges—high dimensionality, noise, outliers, and computational inefficiency—underscore the urgent need for advanced clustering solutions tailored to High-Dimensional Data \cite{awad2023}.
+\\\\
+High dimensionality exacerbates the curse of dimensionality, where distance metrics lose discriminatory power, resulting in sparse and poorly defined clusters. Noise and outliers further distort cluster boundaries, as traditional algorithms often lack mechanisms to downweigh or exclude anomalous points \cite{taheri2024}. For instance, FCM’s probabilistic memberships enhance flexibility but render it highly sensitive to noise, leading to inaccurate cluster assignments in the presence of erroneous data. Similarly, K-Means relies on hard assignments, which fail to capture overlapping clusters and are easily skewed by outliers, compromising clustering quality.
+Even advanced initialization techniques, such as K-Means++ centroid initialization, which is employed in IRFCA algorithm, exhibit notable limitations in High-Dimensional Data contexts. K-Means++ improves upon random initialization by selecting centroids iteratively based on distance-based probabilities, aiming to spread centroids and accelerate convergence. However, its computational cost grows with dataset size, as it requires calculating distances across all points for each centroid selection, making it resource-intensive \cite{baldassi2022}. Additionally, K-Means++ remains sensitive to outliers, as extreme points can disproportionately influence centroid placement, leading to suboptimal initial clusters. Its performance also depends on the underlying data distribution, with non-uniform or noisy datasets potentially yielding inconsistent results. These shortcomings highlight the need for a more robust framework that mitigates the impact of outliers and scales efficiently \cite{li2018}.
+\\\\
+The combined limitations of traditional clustering algorithms and initialization techniques—high computational demands, noise and outlier sensitivity, parameter instability, and challenges with high-dimensional data—underscore a critical gap in the field: the absence of algorithms that can simultaneously deliver high-quality clusters, computational efficiency, and robustness in the face of real-world data complexities. This study addresses this gap by proposing, a IRFCA hybrid algorithm that integrates PCA for dimensionality reduction, K-Means++ for optimized initialization, FCM and PCM for flexible and noise-resistant clustering, and dynamic outlier trimming for precision \cite{elhaik2022}\cite{siddique2018}. By overcoming the shortcomings of conventional methods and enhancing K-Means++ through a synergistic design, the IRFCA algorithm unlocks the full potential of High-Dimensional Data clustering across diverse applications, from business analytics to scientific research. These limitations highlight a critical gap: the lack of algorithms that deliver high-quality clusters, computational efficiency, and robustness for high-dimensional data, which IRFCA addresses through its hybrid design \cite{ravuri2020}\cite{karras2023}\cite{li2024}.
 
-High dimensionality exacerbates the curse of dimensionality, where distance metrics lose discriminatory power, resulting in sparse and poorly defined clusters. Noise and outliers further distort cluster boundaries, as traditional algorithms often lack mechanisms to downweigh or exclude anomalous points (Taheri, 2024). For instance, FCM’s probabilistic memberships enhance flexibility but render it highly sensitive to noise, leading to inaccurate cluster assignments in the presence of erroneous data. Similarly, K-Means relies on hard assignments, which fail to capture overlapping clusters and are easily skewed by outliers, compromising clustering quality.
-Even advanced initialization techniques, such as K-Means++ centroid initialization, which is employed in IRFCA algorithm, exhibit notable limitations in High-Dimensional Data contexts. K-Means++ improves upon random initialization by selecting centroids iteratively based on distance-based probabilities, aiming to spread centroids and accelerate convergence. However, its computational cost grows with dataset size, as it requires calculating distances across all points for each centroid selection, making it resource-intensive (Baldassi, 2022). Additionally, K-Means++ remains sensitive to outliers, as extreme points can disproportionately influence centroid placement, leading to suboptimal initial clusters. Its performance also depends on the underlying data distribution, with non-uniform or noisy datasets potentially yielding inconsistent results. These shortcomings highlight the need for a more robust framework that mitigates the impact of outliers and scales efficiently (Li, 2018).
+\section{Related Works}
+This section reviews clustering fundamentals, soft clustering techniques, and scalability strategies, providing context for IRFCA’s contributions.
+\subsection{Fundamentals of Clustering}
+Clustering is a fundamental data mining technique that groups similar objects based on their features without prior knowledge of class labels \cite{jain1999}. It is essential for exploratory data analysis in domains such as bioinformatics, image processing, and market segmentation \cite{xu2005}. Hard clustering methods, such as K-Means, assign each data point to a single cluster, which can be limiting for datasets with overlapping patterns \cite{wu2024}. Soft clustering, or fuzzy clustering, allows data points to belong to multiple clusters with partial memberships, offering a more flexible representation of complex data relationships \cite{raut2011}.
 
-The combined limitations of traditional clustering algorithms and initialization techniques—high computational demands, noise and outlier sensitivity, parameter instability, and challenges with high-dimensional data—underscore a critical gap in the field: the absence of algorithms that can simultaneously deliver high-quality clusters, computational efficiency, and robustness in the face of real-world data complexities. This study addresses this gap by proposing, a IRFCA hybrid algorithm that integrates PCA for dimensionality reduction, K-Means++ for optimized initialization, FCM and PCM for flexible and noise-resistant clustering, and dynamic outlier trimming for precision (Elhaik, 2022)(Siddique, 2018). By overcoming the shortcomings of conventional methods and enhancing K-Means++ through a synergistic design, the IRFCA algorithm unlocks the full potential of High-Dimensional Data clustering across diverse applications, from business analytics to scientific research. These limitations highlight a critical gap: the lack of algorithms that deliver high-quality clusters, computational efficiency, and robustness for high-dimensional data, which IRFCA addresses through its hybrid design \cite{Ravuri, 2020}(Karras, 2023)(Li, 2024).
+\subsection{Soft Clustering Techniques}
+Soft clustering algorithms enable data points to have partial memberships across multiple clusters, making them ideal for datasets with ambiguous or overlapping patterns. This section reviews three prominent soft clustering methods—Fuzzy C-Means (FCM), Possibilistic C-Means(PCM), and Fuzzy C-Median (FCMedian)—highlighting their mechanisms, strengths, and limitations in the context of large-scale data analysis \cite{zhu2023}\cite{hashemi2023}\cite{panapakidis2019}\cite{kodipalli2023}.
+\\\\
+To elucidate the operational differences between IRFCA and the baseline clustering algorithms—FCM, Fuzzy C-Median (FCMedian), and PCM—a detailed comparison of their algorithmic steps is presented in Table 1 below. This table outlines each method’s approach across key stages, including input parameters, initialization, membership computation, center updates, outlier handling, stopping criteria, and output, highlighting IRFCA’s unique hybrid design that integrates dimensionality reduction, fuzzy and possibilistic clustering, and dynamic outlier trimming. By dissecting these processes, we aim to provide a clear understanding of how IRFCA achieves enhanced robustness and efficiency in clustering large, noisy datasets compared to traditional methods.
+
+\clearpage % forces any pending floats to be printed first
+\begin{table}[H]
+\centering
+\caption{Comparison of Algorithmic Steps Between IRFCA and Baseline Clustering Methods}
+\label{tab:algorithm_comparison}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabularx}{1.05\textwidth}{p{2.3cm}XXXX}
+\toprule
+\textbf{Step} & \textbf{IRFCA} & \textbf{FCM} & \textbf{FCMedian} & \textbf{PCM} \\
+\midrule
+
+\textbf{Input} &
+Data, n\_clusters, m, max\_iter, trim\_proportion, subset\_size &
+Data, n\_clusters, m, max\_iter, error &
+Data, n\_clusters, centers\_init, m, max\_iter, error &
+Data, n\_clusters, m, eta, max\_iter, error \\
+
+\textbf{Initialization} &
+Select random subset (size = subset\_size); initialize centers with K-Means++ on subset &
+Initialize centers with K-Means++ &
+Initialize centers with K-Means++ &
+Initialize random membership matrix (U) and normalize \\
+
+\textbf{Membership Computation} &
+Compute FCM memberships (u\_fcm); compute PCM memberships (u\_pcm) using eta; combine: $u = 0.7u_{fcm} + 0.3u_{pcm}$; normalize $u$ &
+Compute memberships based on distances to centers and $m$ &
+Compute FCM memberships for each iteration &
+Compute $U[c,i] = \frac{1}{1 + (distance[c,i]/\eta)^{1/(m - 1)}}$ \\
+
+\textbf{Center Update} &
+Update centers using normalized combined memberships; recalculate as mean of points per cluster after outlier trimming &
+Update centers as weighted mean (weights = memberships$^m$) &
+For each dimension, sort data, compute cumulative membership weights, select point where cumulative weight $\ge 0.5$ &
+Update centers as weighted mean (weights = U$^m$) \\
+
+\textbf{Outlier Handling} &
+If trim\_proportion $>$ 0, label points with distances $>$ (1 - trim\_proportion) percentile as outliers (-1) &
+None & None & None \\
+
+\textbf{Stopping Criteria} &
+Stop if center change $<$ 0.5 or max\_iter reached &
+Stop if center change $<$ error or max\_iter reached &
+Stop if center change $<$ error or max\_iter reached &
+Stop if change in U $<$ error or max\_iter reached \\
+
+\textbf{Output} &
+Centers, iterations &
+Labels, centers, iterations &
+Labels, centers, iterations &
+Labels, centers, iterations \\
+\bottomrule
+\end{tabularx}
+\end{adjustbox}
+\end{table}
+\clearpage % ensures section 2.3 starts after the table
+
+
+
+\subsection{Scalability in Large-Scale Clustering}
+The rise of High-Dimensional Data has amplified clustering challenges, with datasets often containing millions of records and high-dimensional features \cite{adil2014}. Traditional methods like hierarchical clustering (O(n3) time complexity) and density-based approaches like DBSCAN are impractical for large scales \cite{ester1996}. Strategies to address these challenges include:
+\begin{itemize}[nosep]
+    \item One-Pass Strategies: Process data sequentially, e.g., BIRCH \cite{zhang1997}\cite{khalid2015}.
+    \item Summarization: Reduce data size via representatives, e.g., Scalable K-Means \cite{bahmani2012}\cite{feldman2018}
+    \item Sampling/Batch Processing: Cluster subsets, e.g., Mini Batch K-Means \cite{sculley2010}\cite{peng2018}.
+	\item Approximation: Simplify computations, e.g., Canopy Clustering \cite{sabah2021}\cite{mccallum2000}.
+	\item Divide and Conquer: Partition and merge, e.g., CURE \cite{guha1998}.
+	\item Dimensionality reduction techniques, such as PCA and TruncatedSVD, mitigate the curse of dimensionality by reducing feature space \cite{halko2011}.
+\end{itemize}
+
+\section{Proposed Methodology}
+\subsection{Research Questions and Evaluation Framework}
+The study is guided by a set of research questions that frame the evaluation of IRFCA’s performance on large-scale datasets. These questions target specific aspects of the algorithm’s design, addressing the challenges of high dimensionality, noise, and scalability in High-Dimensional Data clustering:\\
+\textbf{RQ1: To what extent does dimensionality reduction enhance clustering performance in high-dimensional datasets?\\
+RQ2: What is the effect of K-Means++ initialization on clustering convergence and stability?
+It examines how K-Means++ centroid initialization impacts the speed and consistency of the clustering process.\\
+RQ3: How effectively does the FCM-PCM hybrid approach manage noise and ambiguity compared to standalone methods?\\
+RQ4: How does dynamic outlier trim influence cluster precision and compactness?\\
+RQ5: How scalable and consistent is IRFCA under varying parameters and initializations?}\\
+These research questions directly inform the methodology and evaluation framework, guiding the selection of pre-processing techniques, algorithm components and evaluation metrics. The subsequent subsections detail the implementation and evaluation processes designed to address these questions comprehensively.
+
+\subsection{IRFCA: A Hybrid Clustering Approach}
+To address the formidable challenges of clustering large, high-dimensional, and noisy datasets, this study proposes IRFCA, a IRFCA hybrid clustering algorithm that integrates complementary techniques into a cohesive and innovative framework. Designed to overcome the limitations of traditional clustering methods, the IRFCA algorithm combines Principal Component Analysis (PCA) (Elhaik, 2022), K-Means++ Centroid Initialization, Fuzzy C-Means (FCM) \cite{bezdek1984}\cite{hashemi2023}, Possibilistic C-Means (PCM) \cite{krishnapuram1993}\cite{mallik2021}, and a dynamic outlier trimming mechanism. Each component is carefully selected to tackle specific obstacles—dimensionality, data ambiguity, noise, and outliers—while their synergy ensures a balance of computational efficiency, clustering quality, and robustness. This subsection introduces the algorithm’s architecture and highlights its potential to revolutionize High-Dimensional Data clustering across domains such as finance, e-commerce, and scientific research. IRFCA integrates five key components:
+    \begin{enumerate}[nosep]
+        \item PCA for dimensionality reduction
+        \item K-Means++ for initialization
+        \item FCM and PCM for flexible
+        \item noise-robust clustering
+        \item Dynamic outlier trimming for precision
+    \end{enumerate}
+This research aims to demonstrate IRFCA’s ability to cluster large datasets effectively, offering a robust and scalable solution for real-world applications. The motivation for this work emerged from practical challenges encountered through trial and error while clustering large and complex datasets. These challenges, including handling high-dimensional noisy data and achieving computational efficiency, align with the High-Dimensional Data paradigm described by the “5Vs + 1C” framework: Volume, Velocity, Variety, Veracity, Value, and Complexity \cite{benabdellah2019}\cite{thudumu2020}\cite{younas2019}. IRFCA was developed to systematically address these real-world issues, leveraging a hybrid approach to deliver superior performance \cite{hiba2015}\cite{sasikumar2023}.\\
+This research makes several key contributions:
+    \begin{itemize}[nosep]
+        \item IRFCA Algorithm Design: IRFCA integrates PCA, FCM, PCM, and dynamic outlier trimming into a cohesive framework, addressing the limitations of traditional clustering methods
+        \item Empirical Validation: Comprehensive evaluation on a large-scale dataset provides robust evidence of the algorithm’s superior performance in clustering quality and efficiency.
+        \item Practical Insights: Analysis of parameter sensitivity and stability offers actionable guidance for deploying IRFCA in real-world scenarios.
+        \item Broad Applicability: The algorithm’s scalability and robustness position it as a transformative tool for data-driven applications, from business analytics to scientific discovery.
+    \end{itemize}
+
+\subsection{Algorithm Design and Components}
+IRFCA integrates components that are carefully incorporated to address individual challenges, such as the curse of dimensionality, ambiguity of data, interference from noise, and the distorting effects of outliers. Through integrating their strengths, the IRFCA algorithm attains a higher capability than the independent capabilities of traditional clustering techniques and provides a useful solution for diverse applications in finance, e-commerce, healthcare, and scientific exploration. 
+    \begin{itemize}
+        \item \textbf{Dimensionality Reduction:} TruncatedSVD projects data into a lower-dimensional space to reduce noise and complexity \cite{zong2020}.
+        \item \textbf{Modified Fuzzy C-Means:} Combines FCM and PCM memberships with a weighting factor α = 0.7. The Eq.(1) below shows the hybrid membership is computed as:\\
+             w_{ij}^{hybrid}=\ \alpha\bullet w_{ij}^{FCM}+\ (1-\alpha)\bullet\upsilon_{ij}^{PCM}				(1)
+         \\ where w_{ij}^{FCM} and \upsilon_{ij}^{PCM}are computed as per FCM and PCM formulas above.
+        \\\\ The  Eq.(12) shows the objective function as below:\\
+            \\ J_{hybrid}=\ \sum_{i=1}^{n}\sum_{j=1}^{c}{{{(w}_{ij}^{hybrid})}^m||}{X_i-C_j||}^2+ \sum_{j=1}^{c}{\eta\sum_{i=1}^{n}{(1-u_{ij}^{PCM})}^q}		              (2)
+        \item Minimized iteratively with K-means++ initialization, fuzzifier m ∈ {1.2, 1.5, 2.0}, and outlier trimming at proportions {0.001, 0.01}.
+        \item \textbf{Dynamic Subset Selection:} Selects a random 5\% subset of the data for initial clustering, iterating up to 3 times with a convergence threshold of 0.5.
+    \end{itemize}
+IRFCA is a groundbreaking method for clustering huge, high-dimensional, and noisy data sets, designed to overcome the multi-dimensioned issues of High-Dimensional Data analysis. Its IRFCA architecture is based on five foundational elements —Principal Component Analysis (PCA), K-Means++ Centroid Initialization , Fuzzy C-Means (FCM), Possibilistic C-Means (PCM), and dynamic outlier pruning—each of which is a critical building block in the design of a scalable, stable, and accurate clustering mechanism.
+\\\\
+The strength of IRFCA lies in its five integrated components, each addressing a critical aspect of the clustering process:
+    \begin{itemize}[nosep]
+        \item Principal Component Analysis (PCA): PCA serves as the foundation for dimensionality reduction, transforming high-dimensional data into a lower-dimensional subspace that captures the most significant variance. By reducing the number of features—often thousands in datasets like financial transactions or genomic profiles—PCA mitigates the curse of dimensionality, where distance metrics become less meaningful. This step not only enhances computational efficiency by decreasing processing demands but also improves clustering quality by focusing on the most informative aspects of the data, setting the stage for effective subsequent clustering \cite{chang2025}\cite{gewers2021}.
+        \item K-Means++ Centroid Initialization: Optimizing Starting Points: K-Means++ Centroid Initialization, enhances the algorithm’s efficiency and clustering quality by intelligently selecting initial cluster centroids. Traditional random initialization can lead to suboptimal clusters or slow convergence, particularly for large datasets. K-Means++ mitigates this by choosing centroids iteratively, starting with a random point and then selecting subsequent centroids with a probability proportional to their squared distance from existing centroids. This approach ensures well-spread initial centroids, improving the stability and speed of the clustering process. In this IRFCA algorithm, K-Means++ is applied to the reduced-dimensional data from PCA, providing a robust starting point for FCM and PCM, reducing iteration counts, and enhancing the consistency of results across runs \cite{wang2019}\cite{cabrera2019}.
+        \item Fuzzy C-Means (FCM): FCM introduces flexibility to the clustering process by assigning each data point a probabilistic membership to multiple clusters, rather than enforcing hard boundaries. This soft clustering approach is particularly suited for High-Dimensional Data, where clusters often exhibit overlap or ambiguity, such as in customer behaviour analysis or sensor data streams. By computing memberships based on distances to centroids initialized by K-Means++, FCM captures nuanced patterns in complex datasets, but its sensitivity to noise and computational intensity necessitates additional mechanisms for robustness and efficiency. The IRFCA algorithm Uses the FCMeans library with K-means++ initialization and 3 iterations \cite{bezdek1984, yu2004}. Objective function gets updated as described above.
+        \item Possibilistic C-Means (PCM): PCM complements FCM by enhancing resilience to noise, a pervasive issue in real-world datasets. Unlike FCM, which requires memberships to sum to one across clusters, PCM assigns absolute membership values based on a point’s typicality within a cluster. This allows PCM to identify and down weights the noisy points that do not strongly belong to any cluster. Building on the centroids refined by FCM initialized via K-Means++, PCM ensures that noise does not distort cluster boundaries, yielding reliable and coherent groupings. By integrating PCM Custom implementation with $\eta = 1.0$ \cite{krishnapuram1993}, the IRFCA algorithm ensures that noise does not distort cluster boundaries, improving the reliability of the results.
+        \item Dynamic Outlier Trimming: To further refine clustering quality, the IRFCA algorithm incorporates a dynamic outlier trimming mechanism that iteratively identifies and excludes anomalous data points. Outlies, such as fraudulent transactions in a financial dataset, can disproportionately influence cluster centroids, leading to suboptimal groupings. By analysing membership distributions and distance metrics, this adaptive process systematically removes outliers tailored to the dataset’s characteristics, ensuring compact and well-separated clusters without requiring manual intervention \cite{song2021,dorabiala2021}.
+    \end{itemize}
+
+\begin{center}
+\begin{minipage}{0.8\textwidth} % adjust width as needed
+\justifying
+\textbf{Pseudo code for Dynamic Outlier Trimming}\\
+\textbf{Input:} Dataset $X$, num\_clusters $c$, fuzziness $m$, trim\_proportion $t$\\
+\textbf{Step 1.} Pre-process X (sample, impute, standardize)\\
+\textbf{Step 2.} Apply Truncated SVD to reduce X to 3 components\\
+\textbf{Step 3.} Initialize centroids using K-Means++ on 5\% subset\\
+\textbf{Step 4.} Run FCM on X with centroids, m, max\_iter=3\\
+\textbf{Step 5.} Run PCM on X with same centroids, fuse memberships ($\alpha = 0.7$)\\
+\textbf{Step 6.} Trim outliers based on membership threshold t\\
+\textbf{Step 7.} Update centroids and memberships until convergence\\
+\textbf{Step 8.} Return final clusters and centroids\\
+\textbf{Output:} Cluster assignments, centroids\\
+\end{minipage}
+\end{center}
+
+
+\begin{center}
+\begin{minipage}{0.8\textwidth} % adjust width as needed
+\justifying
+    \begin{center}
+    \textbf{Algortihm of IRFCA}    
+    \end{center}
+\textbf{Input:} data, n\_clusters, $m$ (fuzzifier), max\_iter, trim\_proportion, subset\_size\\
+\textbf{Step 1.} Select random subset of data (size = subset\_size)\\
+\textbf{Step 2.} Initialize centres using K-Means++ on subset\\
+\textbf{Step 3.} For each iteration (up to max\_iter):
+\begin{enumerate}[label=\alph*), leftmargin=1.5cm, nosep]
+    \item Fit FCM with current centres, $m$, and 1 iteration
+    \item Compute FCM membership matrix (u\_fcm)
+    \item Calculate distances from data points to centres
+    \item Compute cluster means and set eta as mean of cluster means
+    \item Compute PCM membership (u\_pcm) using distances and eta
+    \item Combine memberships: u = alpha * u\_fcm + (1 - alpha) * u\_pcm (alpha = 0.7)
+    \item Normalize combined memberships
+    \item Update centers using normalized memberships
+    \item Assign labels by max membership
+    \item If trim\_proportion> 0:
+    \begin{itemize}[nosep]
+        \item Compute distances to assigned centres
+        \item Identify outliers (distances > (1 - trim\_proportion) percentile)
+        \item Label outliers as -1
+    \end{itemize}
+    \item Recalculate centres as mean of points per cluster
+    \item If centre change < 0.5, break
+\end{enumerate}
+\textbf{Step 4.} Return centres, iterations\\
+\textbf{Output.} cluster centres, iterations
+\end{minipage}
+\end{center}
+
+\subsection{Evaluation Metrics}
+To assess the performance of IRFCA and baseline algorithms, a comprehensive set of evaluation metrics are employed that measure clustering quality and computational efficiency. These metrics provide insights into the algorithms’ ability to form compact, well-separated clusters while maintaining scalability for large datasets \cite{jain1988,pedregosa2011}. The selection of these metrics is deliberate, designed to address the research questions outlined in the below Section. Inertia, Davies-Bouldin Score, Silhouette Score, and Calinski-Harabasz Score collectively evaluate clustering quality by focusing on compactness, separation, and overall cluster structure, which are critical for assessing IRFCA’s effectiveness in handling high-dimensional, noisy data (RQ1, RQ3, RQ4). The Adjusted Rand Index (ARI) measures clustering stability and accuracy, supporting the evaluation of initialization (RQ2) and robustness across runs (RQ5), while runtime and memory usage ensure the algorithm’s scalability for large-scale datasets (RQ5). This combination of metrics, widely adopted in clustering literature \cite{calinski1974,davies1979, hubert1985,rousseeuw1987}, ensures a thorough and standardized comparison, highlighting IRFCA’s strengths in both quality and efficiency.\\\\
+These metrics provide insights into the algorithms’ ability to form compact, well-separated clusters while maintaining scalability for large datasets. The following metrics are used:\\
+\begin{itemize}[nosep]
+    \item Inertia: Measures the within-cluster sum of squared distances, reflecting cluster compactness. Lower values indicate tighter clusters, but excessively low values may suggest over fitting \cite{rousseeuw1987,rykov2024}.
+    \item Davies-Bouldin Score: Quantifies cluster separation by comparing the average distance within clusters to the distance between cluster centroids. A lower score indicates better defined clusters with minimal overlap \cite{davies1979,ros2023}.
+    \item Silhouette Score: Evaluates cluster cohesion and separation by measuring how similar a data point is to its own cluster compared to other clusters. Scores range from -1 to 1, with higher values indicating better-defined clusters \cite{rousseeuw1987,shahapure2020}.
+    \item Calinski-Harabasz Score: Assesses cluster quality by computing the ratio of between cluster dispersion to within-cluster dispersion. Higher values indicate well-separated and compact clusters \cite{calinski1974,lima2020}.
+    \item Adjusted Rand Index: Measures the similarity between predicted and true cluster assignments (when ground truth is available) by accounting for chance agreements. Scores range from -1 to 1, with 1 indicating perfect agreement \cite{hubert1985,warrens2022}.
+    \item Runtime and Memory Usage: Quantify computational efficiency, critical for assessing scalability on large datasets. Runtime measures the time taken to complete clustering, while memory usage tracks the peak memory required during execution \cite{pedregosa2011}.
+\end{itemize}
+
+
+\subsection{Advantages of IRFCA’s Design}
+IRFCA’s strength lies in its integrated architecture, which combines Principal Component Analysis (PCA), K-Means++ initialization, Fuzzy C-Means (FCM), Possibilistic C-Means (PCM), and dynamic outlier trimming to address high-dimensional data challenges. PCA reduces feature dimensionality, enabling efficient clustering by focusing on the most informative data aspects, thus mitigating the curse of dimensionality \cite{zong2020}. K-Means++ ensures well-distributed initial centroids, enhancing convergence speed and stability compared to random initialization \cite{wang2019,cabrera2019}. FCM’s probabilistic memberships capture complex, overlapping patterns, ideal for datasets with ambiguous structures, while PCM’s noise resilience minimizes the impact of irrelevant points \cite{bezdek1984,yu2004,krishnapuram1993}. Dynamic outlier trimming refines cluster boundaries by systematically excluding anomalies, ensuring compact and well-separated clusters \cite{song2021,dorabiala2021}. \\
+Unlike standalone methods—FCM struggles with noise, PCM lacks scalability, and K-Means fails with overlapping clusters—IRFCA’s synergistic design balances clustering quality, efficiency, and robustness, making it a versatile solution for large-scale datasets across domains like cyber security, data science, and healthcare.
+
+\section{Experimental Setup}
+The below section outlines the experimental framework for evaluating IRFCA against baseline clustering algorithms—Fuzzy C-Means (FCM), Fuzzy C-Median (FCMedian), and Possibilistic C-Means (PCM)—across three large-scale datasets from cyber security, data science, and healthcare domains. The setup addresses the research questions (RQ1–RQ5), focusing on dimensionality reduction, initialization stability, noise handling, outlier management, and scalability/robustness. By leveraging diverse datasets and a systematic configuration of parameters, hardware, software, and evaluation methods, the experiments aim to validate IRFCA’s effectiveness in clustering high-dimensional, noisy data across real-world scenarios.
+\subsection{Datasets and Pre-processing}
+To ensure practical utility, the selected datasets reflect real-world challenges of high dimensionality, noise, and scale, testing IRFCA’s adaptability across cyber security, data science, and healthcare domains \cite{jain1988,kaufman1990}. Three datasets are used:
+\begin{itemize}[nosep]
+    \item Network Attack Data: A 10.9GB dataset with 4,077,265 rows, capturing network packet data during an SSDP flood attack (cyber security). Features include timestamps, IPs, and protocols, with noise from anomalous packets (Mirsky, 2020).
+    \item Kaggle Public Meta Data: A 4.45GB dataset with 23,423,543 rows, containing metadata about Kaggle competition episodes (data science). Features include competition IDs, submissions, and scores, with potential missing values (Kaggle, 2025).
+    \item CORD-19: A 1.53GB dataset with 1,058,609 rows, comprising metadata for COVID-19 research articles (healthcare). Features include titles, abstracts, and authors, with textual noise and missing entries (Allen Institute for AI, 2020).
+\end{itemize}
+Due to memory constraints, samples were extracted: 500,000 rows from Network Attack Data, 1,000,000 rows from Kaggle Public Meta Data, and 500,000 rows from CORD-19. Preprocessing involved encoding categorical features, converting CORD-19 text to TF-IDF vectors, imputing missing values, standardizing features, and applying Truncated SVD to reduce dimensions to three components, ensuring compatibility with IRFCA’s dimensionality reduction approach. The details of the Datasets are given in the Table 2: 
+
+\begin{table}[h!]
+\centering
+\caption{Dataset Description}
+\begin{tabular}{|p{3.5cm}|p{1.5cm}|p{2cm}|p{3cm}|p{5cm}|}
+\hline
+\textbf{Dataset} & \textbf{Size} & \textbf{Rows} & \textbf{Domain} & \textbf{Reason} \\ \hline
+Network Attack Data (Mirsky, 2020) & 10.9 GB & 40,77,265 & Cybersecurity / Network Security & Captures network packet data during an SSDP flood attack, used for analyzing and detecting denial-of-service (DoS) attacks. \\ \hline
+Kaggle Public Meta Data (Kaggle, 2025) & 4.45 GB & 2,34,23,543 & Data Science / Competition Platforms & Contains metadata about Kaggle competition episodes, relevant to the data science and machine learning community. \\ \hline
+CORD–19 (Allen Institute for AI, 2020) & 1.53 GB & 10,58,609 & Healthcare / Medical Research & Contains metadata for COVID-19 research articles, aimed at advancing medical and scientific understanding of the virus. \\ \hline
+\end{tabular}
+\end{table}
+
+\subsection{Experimental Configuration}
+The parameter settings for IRFCA and the baseline algorithms (FCM, Fuzzy C-Median, and PCM) are theoretically grounded to address the challenges of clustering large-scale, noisy, and high-dimensional datasets, balancing quality, robustness, and efficiency. The fuzziness parameter ($m$), common to all methods, controls the softness of cluster assignments, with a range of values tested to explore the trade-off between distinctness and flexibility in handling ambiguous data \cite{bezdek1984}. IRFCA uniquely incorporates a trim proportion for dynamic outlier handling, excluding a small fraction of points to enhance cluster precision, a strategy rooted in robust clustering theory \cite{krishnapuram1993}. A subset size, defined as a percentage of the sampled data, is used for K-Means++ initialization in IRFCA to ensure scalability while maintaining centroid quality. The maximum iteration limit, applied across all algorithms, ensures convergence within practical time constraints, while multiple random seeds enable stability testing to assess consistency via the Adjusted Rand Index (ARI) \cite{hubert1985}. Parameter sensitivity tests vary ($m$), trim proportion, and subset size to evaluate their impact on performance, while stability tests across seeds ensure robustness, aligning with best practices in clustering research \cite{halko2011}.
+
+\subsection{Hardware, Software, Evaluation, and Reproducibility}
+The computational environment, evaluation methods, and reproducibility measures are critical for clustering experiments, impacting runtime, memory usage, and result validation. Metrics must capture quality, stability, and efficiency across domains \cite{wasim2024}, while transparency about limitations ensures interpretability \cite{tortarolo2023}. This ensures IRFCA’s performance is reliably assessed and replicable.
+\begin{itemize}[nosep]
+    \item Hardware and Software: Experiments run on a 16-core CPU workstation with 64GB RAM, using Python 3.9 or 3.11. Libraries include Scikit-learn, NumPy/SciPy, Pandas, and TfidfVectorizer. Memory is capped at 10% (approximately 6.4GB) (Mhembere, 2019).
+    \item Evaluation Methodology: Metrics from Section 3.5 are computed for each dataset, with experiments repeated three times per configuration and aggregated via mean and standard deviation for robust comparisons across algorithms (Mishra, 2022).
+    \item Reproducibility and Limitations: Code and seeds will be shared via a public repository. Limitations include sampling bias, memory constraints, and domain-specific challenges. 
+\end{itemize}
+
+\subsection{Visualization of Clustering Results}
+This section provides a comprehensive visual exploration of IRFCA’s performance across three diverse datasets: Network Attack Data (10.9 GB), Kaggle Public Meta Data (4.45 GB), and CORD-19 (1.53 GB). By leveraging a variety of graphical tools, including line graphs, scatter plots, pie charts, box plots, and bar charts, this section illustrates key aspects of the algorithm’s clustering quality, efficiency, and robustness compared to baseline methods such as Fuzzy C-Means (FCM), Fuzzy C-Median (FCMedian), and Possibilistic C-Means (PCM). These visualizations facilitate a deeper understanding of how IRFCA handles high-dimensional, noisy data in cyber security, data science, and healthcare domains, addressing research questions related to dimensionality reduction, noise handling, and scalability. Each graphic is designed to highlight specific metrics—such as Silhouette Scores, convergence rates, and cluster distributions—offering clear insights into the algorithm’s strengths and areas for improvement. 
+
+
+\begin{figure}[h] % h = here, t = top, b = bottom
+    \centering
+    \includegraphics[width=0.5\textwidth]{example.png} % adjust width
+    \caption{Description of the image}
+    \label{fig:example}
+\end{figure}
 
 
 Here is a citation \cite{chow:68}.
@@ -141,3 +398,4 @@ by $H$. We aim to show that $\fracpartial{I_{uv}}{P_{v0}} < 0$....\\
 \bibliography{refs}
 
 \end{document}
+
